@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYC 2026 - Kelompok Apokalipto</title>
-    <link rel="icon" type="image/png" href="logo buat head.jpeg">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -29,286 +30,203 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-<body class="bg-apokalipto-dark text-gray-100 min-h-screen selection:bg-apokalipto-yellow selection:text-black">
+<body class="bg-apokalipto-dark text-gray-100 min-h-screen flex flex-col justify-between">
 
-    <!-- HEADER / NAVBAR -->
-    <header class="relative border-b border-apokalipto-border bg-black/60 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+    <!-- Header / Navbar -->
+    <header class="bg-apokalipto-card border-b border-apokalipto-border sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-4 h-4 bg-apokalipto-yellow rounded-sm animate-pulse"></div>
-                <h1 class="text-lg md:text-xl font-extrabold tracking-wider text-white">APOKALIPTO <span class="text-apokalipto-yellow">SYC 2026</span></h1>
+                <div class="w-10 h-10 rounded-full bg-apokalipto-yellow flex items-center justify-center text-apokalipto-dark font-bold text-lg">A</div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-tight">Kelompok Apokalipto</h1>
+                    <p class="text-xs text-gray-400">SYC 2026 - Real-Time Board</p>
+                </div>
             </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-gray-300">
-                <a href="#galeri" class="hover:text-apokalipto-yellow transition">Galeri Day</a>
-                <a href="#pesan" class="hover:text-apokalipto-yellow transition">Papan Pesan</a>
-            </nav>
+            <span class="px-3 py-1 bg-apokalipto-yellow/10 text-apokalipto-yellow text-xs font-semibold rounded-full border border-apokalipto-yellow/20">Online 24 Jam</span>
         </div>
     </header>
 
-    <!-- HERO BANNER DENGAN GAMBAR RESMI -->
-    <section class="relative overflow-hidden py-12 px-4 border-b border-apokalipto-border bg-gradient-to-b from-apokalipto-card to-apokalipto-dark">
-        <div class="max-w-4xl mx-auto text-center">
-            <span class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-widest text-black bg-apokalipto-yellow rounded-full uppercase shadow-md">Kelompok Resmi SYC 2026</span>
-            
-            <!-- GAMBAR HEADER UTAMA -->
-            <div class="relative rounded-3xl overflow-hidden border-2 border-apokalipto-yellow/30 shadow-2xl mb-6 group">
-                <img src="FOTO Apokalipto.jpg" alt="Apokalypto SYC 2026 Header" class="w-full h-auto max-h-[450px] object-cover group-hover:scale-102 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end justify-center pb-6">
-                    <p class="text-apokalipto-yellow font-bold text-lg md:text-xl tracking-wide drop-shadow-md">"Keluarga Solid, Berakar, & Bertumbuh Bersama"</p>
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow">
+        
+        <!-- Header Banner Foto -->
+        <div class="mb-10 rounded-2xl overflow-hidden border border-apokalipto-border bg-apokalipto-card shadow-lg">
+            <div class="relative h-64 sm:h-80 w-full">
+                <img src="FOTO Apokalipto.jpg" alt="Foto Kelompok Apokalipto" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-apokalipto-dark via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Dokumentasi & Papan Pesan</h2>
+                    <p class="text-sm text-gray-300 mt-1">Simpan kesan dan pesan kegiatan SYC 2026 secara real-time.</p>
                 </div>
             </div>
-
-            <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto mb-8">
-                Dokumentasi perjalanan lengkap dari Day 1 sampai Day 4, momen berharga, dan catatan khusus kelompok Apokalipto.
-            </p>
-            <div class="flex justify-center gap-4">
-                <a href="#galeri" class="px-6 py-3 font-bold text-black bg-apokalipto-yellow hover:bg-apokalipto-yellowHover transition rounded-xl shadow-lg shadow-apokalipto-yellow/10">Jelajahi Galeri Day</a>
-                <a href="#pesan" class="px-6 py-3 font-bold text-white bg-apokalipto-card hover:bg-apokalipto-border border border-apokalipto-border transition rounded-xl">Buka Papan Pesan</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- GALERI FOTO BERDASARKAN DAY (DAY 1 - DAY 4) -->
-    <section id="galeri" class="py-20 px-4 max-w-6xl mx-auto">
-        <div class="text-center mb-10">
-            <h3 class="text-2xl md:text-3xl font-extrabold text-white">Galeri Dokumentasi <span class="text-apokalipto-yellow">Day 1 - 4</span></h3>
-            <p class="text-gray-400 text-sm mt-1">Pilih hari kegiatan untuk melihat dokumentasi foto spesial kelompok Apokalipto.</p>
         </div>
 
-        <!-- Tombol Tab Day 1 - Day 4 -->
-        <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
-            <button onclick="switchTab('day1')" id="btn-day1" class="px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-yellow text-black shadow-md">📅 Day 1</button>
-            <button onclick="switchTab('day2')" id="btn-day2" class="px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-card text-gray-300 border border-apokalipto-border hover:border-apokalipto-yellow">📅 Day 2</button>
-            <button onclick="switchTab('day3')" id="btn-day3" class="px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-card text-gray-300 border border-apokalipto-border hover:border-apokalipto-yellow">📅 Day 3</button>
-            <button onclick="switchTab('day4')" id="btn-day4" class="px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-card text-gray-300 border border-apokalipto-border hover:border-apokalipto-yellow">📅 Day 4</button>
-        </div>
-
-        <!-- Kontainer Konten Galeri -->
-        <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Data akan dirender lewat JavaScript di bawah -->
-        </div>
-    </section>
-
-    <!-- PAPAN PESAN SECTION -->
-    <section id="pesan" class="py-20 px-4 max-w-3xl mx-auto">
-        <div class="bg-apokalipto-card border border-apokalipto-border rounded-3xl p-6 md:p-10 shadow-2xl">
+        <!-- Papan Pesan Section -->
+        <section class="bg-apokalipto-card border border-apokalipto-border rounded-2xl p-6 shadow-xl">
             <div class="text-center mb-8">
-                <span class="text-xs font-bold text-apokalipto-yellow uppercase tracking-widest">Akses Anggota Kelompok</span>
-                <h3 class="text-2xl md:text-3xl font-extrabold text-white mt-2">Papan Pesan <span class="text-apokalipto-yellow">Apokalipto</span></h3>
-                <p class="text-gray-400 text-sm mt-1">Masukkan token khusus kelompok sebelum mengirim pesan agar tidak ada spam dari luar.</p>
+                <span class="text-xs uppercase tracking-widest text-apokalipto-yellow font-bold">Akses Anggota Kelompok</span>
+                <h3 class="text-2xl font-bold text-white mt-1">Papan Pesan Apokalipto</h3>
+                <p class="text-sm text-gray-400 mt-1">Masukkan token khusus kelompok sebelum mengirim pesan agar tidak ada spam dari luar.</p>
             </div>
 
-            <!-- Form Input Pesan -->
-            <form id="pesanForm" class="space-y-5">
+            <!-- Form Kirim Pesan -->
+            <form id="messageForm" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Nama Anggota</label>
-                    <input type="text" id="namaPengirim" required placeholder="Contoh: Nama kamu..." class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-apokalipto-yellow transition">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Nama Anggota</label>
+                    <input type="text" id="senderName" required placeholder="Contoh: Nama kamu..." class="w-full bg-apokalipto-dark border border-apokalipto-border rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-apokalipto-yellow transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Token / Kode Rahasia Kelompok</label>
-                    <input type="password" id="tokenAkses" required placeholder="Masukkan token rahasia..." class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-apokalipto-yellow transition">
-
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Token / Kode Rahasia Kelompok</label>
+                    <input type="password" id="groupToken" required placeholder="Masukkan token rahasia..." class="w-full bg-apokalipto-dark border border-apokalipto-border rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-apokalipto-yellow transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Pesan / Kesan</label>
-                    <textarea id="isiPesan" rows="4" required placeholder="Tulis pesan atau kesan kegiatan di sini..." class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-apokalipto-yellow transition"></textarea>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">Pesan / Kesan</label>
+                    <textarea id="messageText" rows="3" required placeholder="Tulis pesan atau kesan kegiatan di sini..." class="w-full bg-apokalipto-dark border border-apokalipto-border rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-apokalipto-yellow transition"></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-4 font-bold text-black bg-apokalipto-yellow hover:bg-apokalipto-yellowHover transition rounded-xl shadow-lg shadow-apokalipto-yellow/10">
+                <button type="submit" class="w-full bg-apokalipto-yellow hover:bg-apokalipto-yellowHover text-apokalipto-dark font-bold py-3.5 px-6 rounded-xl transition shadow-md">
                     Kirim Pesan ke Papan
                 </button>
             </form>
 
-            <!-- Alert Notifikasi -->
-            <div id="notifAlert" class="hidden mt-4 p-4 rounded-xl text-sm font-medium"></div>
+            <div id="errorAlert" class="hidden mt-4 p-3 bg-red-900/40 border border-red-500/50 text-red-200 text-sm rounded-xl text-center"></div>
+            <div id="successAlert" class="hidden mt-4 p-3 bg-green-900/40 border border-green-500/50 text-green-200 text-sm rounded-xl text-center">Pesan berhasil dikirim ke server!</div>
 
             <!-- Daftar Pesan Masuk -->
-            <div class="mt-12 border-t border-apokalipto-border pt-8">
+            <div class="mt-10 pt-6 border-t border-apokalipto-border">
                 <h4 class="text-lg font-bold text-white mb-4">Pesan Masuk dari Anggota:</h4>
-                <div id="listPesan" class="space-y-4">
-                    <div class="bg-black/40 border border-apokalipto-border p-4 rounded-xl">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-apokalipto-yellow text-sm">Admin Apokalipto</span>
-                            <span class="text-xs text-gray-500">Hari ini</span>
-                        </div>
-                        <p class="text-gray-300 text-sm">Website resmi Apokalipto siap digunakan! Silakan isi papan pesan menggunakan token kalian.</p>
-                    </div>
+                <div id="messagesContainer" class="space-y-4">
+                    <!-- Pesan real-time akan muncul di sini otomatis -->
+                    <div class="text-center py-6 text-gray-500 text-sm">Memuat pesan dari server...</div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- LIGHTBOX MODAL (POPUP FOTO NEXT/PREV) -->
-    <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl font-bold bg-white/10 hover:bg-white/20 w-12 h-12 rounded-full flex items-center justify-center transition">&times;</button>
-        
-        <button onclick="prevPhoto()" class="absolute left-4 md:left-8 text-white text-2xl bg-white/10 hover:bg-white/20 w-12 h-12 rounded-full flex items-center justify-center transition">&#10094;</button>
-        
-        <div class="max-w-3xl text-center">
-            <img id="lightboxImg" src="" alt="Zoom Foto" class="max-h-[75vh] max-w-full rounded-2xl mx-auto shadow-2xl border border-apokalipto-border">
-            <h4 id="lightboxTitle" class="text-white font-bold text-lg mt-4"></h4>
-            <p id="lightboxDesc" class="text-gray-400 text-sm"></p>
-        </div>
-
-        <button onclick="nextPhoto()" class="absolute right-4 md:right-8 text-white text-2xl bg-white/10 hover:bg-white/20 w-12 h-12 rounded-full flex items-center justify-center transition">&#10095;</button>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-apokalipto-border py-8 text-center text-xs text-gray-500">
-        <p>&copy; 2026 Kelompok Apokalipto • SYC 2026. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-apokalipto-card border-t border-apokalipto-border py-6 text-center text-xs text-gray-500">
+        <p>&copy; 2026 Kelompok Apokalipto - SYC 2026. All rights reserved.</p>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        const TOKEN_VALID = "APOKALIPTO2026";
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // DATA GALERI: DAY 2 & DAY 3 BERISI 5 FOTO, DAY 1 & DAY 4 BERISI 4 FOTO
-        const galleryData = {
-            day1: [
-                { url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800", title: "Day 1 - Group Bonding", desc: "Suasana awal tiba di lokasi SYC 2026." },
-                { url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800", title: "Day 1 - Dinner", desc: "Briefing dan perkenalan anggota kelompok." },
-                { url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800", title: "Day 1 - Opening + KKR 1", desc: "Mulai menyusun yel-yel dan kekompakan." },
-                { url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800", title: "Day 1 - Alone With GOD", desc: "Kebaktian pembuka dan keakraban malam hari." }
-            ],
-            day2: [
-                { url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800", title: "Day 2 - Breakfast", desc: "Pemanasan dan aktivitas fisik seru di pagi hari." },
-                { url: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800", title: "Day 2 - Group Activity", desc: "Mendengarkan seminar dan sharing bersama." },
-                { url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800", title: "Day 2 - Lunch", desc: "Kerja sama tim menyelesaikan rintangan." },
-                { url: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=800", title: "Day 2 - Dinner", desc: "Menikmati api unggun dan penampilan kelompok." },
-                { url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800", title: "Day 2 - Joygether", desc: "Sesi tambahan penutup malam yang seru di Day 2." }
-            ],
-            day3: [
-                { url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800", title: "Day 3 - Breakfast", desc: "Membedah materi dan sharing mendalam." },
-                { url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800", title: "Day 3 - Group Activity", desc: "Keseruan bertanding antar kelompok." },
-                { url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800", title: "Day 3 - Lunch", desc: "Ngobrol santai dan mempererat kebersamaan." },
-                { url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=800", title: "Day 3 - Dinner", desc: "Sesi ibadah malam yang penuh berkat." },
-                { url: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800", title: "Day 3 - NYC + Reconnect", desc: "Momen seru penutupan hari ketiga." }
-            ],
-            day4: [
-                { url: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800", title: "Day 4 - Penutupan Pagi", desc: "Persiapan acara penutupan kelompok." },
-                { url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800", title: "Day 4 - Kesan Pesan", desc: "Menuliskan kesan dan pesan terakhir." },
-                { url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800", title: "Day 4 - Foto Bersama", desc: "Dokumentasi lengkap formasi lengkap Apokalipto." },
-                { url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=800", title: "Day 4 - Kepulangan", desc: "Sayonara dan kembali ke rumah masing-masing." }
-            ]
+        // Konfigurasi Firebase dari akun kamu
+        const firebaseConfig = {
+            apiKey: "AIzaSyW-wdA52wL2F1jayFAZdB4uUHPnY9f2ss",
+            authDomain: "syc-2026-apokalipto.firebaseapp.com",
+            projectId: "syc-2026-apokalipto",
+            storageBucket: "syc-2026-apokaliptostorage.app",
+            messagingSenderId: "839575213360",
+            appId: "1:839575213360:web:620ee7f453f57080eee4f5",
+            measurementId: "G-QJV4C442H3"
         };
 
-        let currentCategory = 'day1';
-        let currentIndex = 0;
+        // Inisialisasi Firebase & Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        function switchTab(category) {
-            currentCategory = category;
-            
-            ['day1', 'day2', 'day3', 'day4'].forEach(cat => {
-                const btn = document.getElementById(`btn-${cat}`);
-                if(cat === category) {
-                    btn.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-yellow text-black shadow-md";
-                } else {
-                    btn.className = "px-5 py-2.5 rounded-xl text-sm font-bold transition bg-apokalipto-card text-gray-300 border border-apokalipto-border hover:border-apokalipto-yellow";
-                }
-            });
+        const VALID_TOKEN = "APOKALIPTO2026";
 
-            renderGallery(category);
-        }
+        const messageForm = document.getElementById('messageForm');
+        const senderNameInput = document.getElementById('senderName');
+        const groupTokenInput = document.getElementById('groupToken');
+        const messageTextInput = document.getElementById('messageText');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const errorAlert = document.getElementById('errorAlert');
+        const successAlert = document.getElementById('successAlert');
 
-        function renderGallery(category) {
-            const container = document.getElementById('gallery-container');
-            container.innerHTML = "";
-
-            galleryData[category].forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = "group relative bg-apokalipto-card border border-apokalipto-border rounded-2xl overflow-hidden shadow-md cursor-pointer hover:border-apokalipto-yellow transition";
-                card.onclick = () => openLightbox(category, index);
-                card.innerHTML = `
-                    <div class="aspect-video bg-gray-900 relative overflow-hidden">
-                        <img src="${item.url}" alt="${item.title}" class="object-cover w-full h-full group-hover:scale-105 transition duration-500">
-                    </div>
-                    <div class="p-4">
-                        <span class="text-xs font-semibold text-apokalipto-yellow uppercase tracking-wider">${category.toUpperCase()}</span>
-                        <h4 class="font-bold text-white text-base mt-1">${item.title}</h4>
-                        <p class="text-gray-400 text-xs mt-1 line-clamp-1">${item.desc}</p>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function openLightbox(category, index) {
-            currentCategory = category;
-            currentIndex = index;
-            updateLightboxContent();
-            document.getElementById('lightbox').classList.remove('hidden');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.add('hidden');
-        }
-
-        function nextPhoto() {
-            const list = galleryData[currentCategory];
-            currentIndex = (currentIndex + 1) % list.length;
-            updateLightboxContent();
-        }
-
-        function prevPhoto() {
-            const list = galleryData[currentCategory];
-            currentIndex = (currentIndex - 1 + list.length) % list.length;
-            updateLightboxContent();
-        }
-
-        function updateLightboxContent() {
-            const item = galleryData[currentCategory][currentIndex];
-            document.getElementById('lightboxImg').src = item.url;
-            document.getElementById('lightboxTitle').innerText = item.title;
-            document.getElementById('lightboxDesc').innerText = item.desc;
-        }
-
-        const form = document.getElementById('pesanForm');
-        const notifAlert = document.getElementById('notifAlert');
-        const listPesan = document.getElementById('listPesan');
-
-        form.addEventListener('submit', function(e) {
+        // Handle Submit Pesan
+        messageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const nama = document.getElementById('namaPengirim').value;
-            const token = document.getElementById('tokenAkses').value;
-            const pesan = document.getElementById('isiPesan').value;
+            errorAlert.classList.add('hidden');
+            successAlert.classList.add('hidden');
 
-            if(token !== TOKEN_VALID) {
-                notifAlert.className = "mt-4 p-4 rounded-xl text-sm font-medium bg-red-950/80 border border-red-800 text-red-300";
-                notifAlert.innerText = "❌ Token salah! Orang luar tidak bisa mengirim pesan. Minta token ke anggota kelompok ya.";
-                notifAlert.classList.remove('hidden');
+            const name = senderNameInput.value.trim();
+            const token = groupTokenInput.value.trim();
+            const text = messageTextInput.value.trim();
+
+            // Validasi Token
+            if (token !== VALID_TOKEN) {
+                errorAlert.textContent = "Token / Kode Rahasia Kelompok salah! Masukkan token yang benar (APOKALIPTO2026).";
+                errorAlert.classList.remove('hidden');
                 return;
             }
 
-            notifAlert.className = "mt-4 p-4 rounded-xl text-sm font-medium bg-green-950/80 border border-green-800 text-green-300";
-            notifAlert.innerText = "✅ Pesan berhasil dikirim ke papan pesan!";
-            notifAlert.classList.remove('hidden');
+            try {
+                // Simpan ke Firestore Database
+                await addDoc(collection(db, "apokalipto_messages"), {
+                    name: name,
+                    message: text,
+                    createdAt: serverTimestamp()
+                });
 
-            const newItem = document.createElement('div');
-            newItem.className = "bg-black/40 border border-apokalipto-border p-4 rounded-xl";
-            newItem.innerHTML = `
-                <div class="flex justify-between items-center mb-1">
-                    <span class="font-bold text-apokalipto-yellow text-sm">${escapeHtml(nama)}</span>
-                    <span class="text-xs text-gray-500">Baru saja</span>
-                </div>
-                <p class="text-gray-300 text-sm">${escapeHtml(pesan)}</p>
-            `;
-            listPesan.prepend(newItem);
-            form.reset();
+                // Reset form
+                senderNameInput.value = '';
+                groupTokenInput.value = '';
+                messageTextInput.value = '';
+                successAlert.classList.remove('hidden');
 
-            setTimeout(() => {
-                notifAlert.classList.add('hidden');
-            }, 4000);
+                setTimeout(() => {
+                    successAlert.classList.add('hidden');
+                }, 4000);
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                errorAlert.textContent = "Gagal mengirim pesan ke server. Coba lagi.";
+                errorAlert.classList.remove('hidden');
+            }
         });
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+        // Ambil Data Secara Real-Time (24 Jam Non-Stop)
+        const q = query(collection(db, "apokalipto_messages"), orderBy("createdAt", "desc"));
+        
+        onSnapshot(q, (snapshot) => {
+            messagesContainer.innerHTML = '';
+            
+            if (snapshot.empty) {
+                messagesContainer.innerHTML = '<div class="text-center py-6 text-gray-500 text-sm">Belum ada pesan masuk. Jadilah yang pertama mengirim pesan!</div>';
+                return;
+            }
 
-        // Load default tab day1 saat pertama buka
-        renderGallery('day1');
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                // Format waktu sederhana
+                let timeString = "Baru saja";
+                if (data.createdAt) {
+                    const date = data.createdAt.toDate();
+                    timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + " WIB";
+                }
+
+                const card = document.createElement('div');
+                card.className = "bg-apokalipto-dark border border-apokalipto-border rounded-xl p-4 shadow";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-apokalipto-yellow text-sm">${escapeHtml(data.name)}</span>
+                        <span class="text-xs text-gray-500">${timeString}</span>
+                    </div>
+                    <p class="text-gray-200 text-sm whitespace-pre-line">${escapeHtml(data.message)}</p>
+                `;
+                messagesContainer.appendChild(card);
+            });
+        });
+
+        // Fungsi aman mencegah script jahat (XSS)
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
     </script>
 </body>
 </html>
