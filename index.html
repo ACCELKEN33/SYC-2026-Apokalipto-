@@ -109,6 +109,19 @@
                     <textarea id="isiPesan" rows="4" required placeholder="Tulis pesan atau kesan kegiatan di sini..." class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-apokalipto-yellow transition"></textarea>
                 </div>
 
+                <!-- Upload Foto dari Galeri -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Upload Foto dari Galeri (Opsional, Maks. 10 MB)</label>
+                    <input type="file" id="fotoFile" accept="image/*" class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-2.5 text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-apokalipto-yellow file:text-black hover:file:bg-apokalipto-yellowHover cursor-pointer focus:outline-none focus:border-apokalipto-yellow transition">
+                    <div id="fotoPreview" class="hidden mt-3 relative bg-black/60 border border-apokalipto-border rounded-2xl p-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span id="fotoName" class="text-xs text-gray-400 truncate max-w-[75%]"></span>
+                            <button type="button" id="btnHapusFoto" class="text-xs font-bold text-red-400 hover:text-red-300">Hapus Foto</button>
+                        </div>
+                        <div id="previewBox" class="rounded-xl overflow-hidden max-h-64 flex justify-center bg-black"></div>
+                    </div>
+                </div>
+
                 <button type="submit" id="btnKirim" class="w-full py-4 font-bold text-black bg-apokalipto-yellow hover:bg-apokalipto-yellowHover transition rounded-xl shadow-lg shadow-apokalipto-yellow/10 disabled:opacity-60">
                     Kirim Pesan ke Papan
                 </button>
@@ -116,8 +129,15 @@
 
             <div id="notifAlert" class="hidden mt-4 p-4 rounded-xl text-sm font-medium"></div>
 
+            <!-- Daftar Pesan + Search Bar Nama -->
             <div class="mt-12 border-t border-apokalipto-border pt-8">
-                <h4 class="text-lg font-bold text-white mb-4">Pesan Masuk dari Anggota:</h4>
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                    <h4 class="text-lg font-bold text-white">Pesan Masuk dari Anggota:</h4>
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" id="searchNama" placeholder="Cari nama anggota..." class="w-full bg-black border border-apokalipto-border rounded-xl px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apokalipto-yellow transition">
+                    </div>
+                </div>
+
                 <div id="listPesan" class="space-y-4">
                     <div class="text-center py-6 text-gray-500 text-sm">Memuat pesan dari server...</div>
                 </div>
@@ -144,17 +164,17 @@
         <p>&copy; 2026 Kelompok Apokalipto • SYC 2026. All rights reserved.</p>
     </footer>
 
-    <!-- SATU SCRIPT: GALERI + FIREBASE -->
+    <!-- SATU SCRIPT: GALERI + FIRESTORE (FOTO TERKOMPRESI + SEARCH) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ================= FIREBASE =================
         const firebaseConfig = {
-            apiKey: "AIzaSyW-wdA52wL2F1jayFAZdB4uUHPnY9f2ss",
+            apiKey: "AIzaSyBY-wdA52wL2F1jayFAZdB4uUHPnY9f2ss",
             authDomain: "syc-2026-apokalipto.firebaseapp.com",
             projectId: "syc-2026-apokalipto",
-            storageBucket: "syc-2026-apokaliptostorage.app",
+            storageBucket: "syc-2026-apokalipto.firebasestorage.app",
             messagingSenderId: "839575213360",
             appId: "1:839575213360:web:620ee7f453f57080eee4f5",
             measurementId: "G-QJV4C442H3"
@@ -164,6 +184,8 @@
         const db = getFirestore(app);
 
         const TOKEN_VALID = "APOKALIPTO2026";
+        const MAX_INPUT_PHOTO_SIZE = 10 * 1024 * 1024; // 10 MB sebelum dikompres
+        const MAX_COMPRESSED_CHARS = 700000; // Aman di bawah batas 1 MB dokumen Firestore
 
         // ================= DATA GALERI =================
         const galleryData = {
@@ -199,12 +221,26 @@
         let currentIndex = 0;
 
         function escapeHtml(text) {
-            return String(text)
+            return String(text || '')
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
+        }
+
+        function sanitizeImageSrc(src) {
+            if (!src || typeof src !== "string") return "";
+            if (src.startsWith("data:image/jpeg;base64,") || src.startsWith("data:image/png;base64,") || src.startsWith("data:image/webp;base64,")) {
+                return src;
+            }
+            try {
+                const parsed = new URL(src);
+                if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+                    return parsed.href;
+                }
+            } catch (_) {}
+            return "";
         }
 
         // ================= GALERI =================
@@ -273,19 +309,27 @@
             updateLightboxContent();
         }
 
-        // PENTING: di <script type="module"> fungsi tidak otomatis global,
-        // jadi harus dipasang ke window supaya onclick="..." di HTML bisa jalan.
         window.switchTab = switchTab;
         window.openLightbox = openLightbox;
         window.closeLightbox = closeLightbox;
         window.nextPhoto = nextPhoto;
         window.prevPhoto = prevPhoto;
 
-        // ================= PAPAN PESAN (FIREBASE) =================
+        // ================= PAPAN PESAN + FOTO TERKOMPRESI + SEARCH =================
         const form = document.getElementById('pesanForm');
         const notifAlert = document.getElementById('notifAlert');
         const listPesan = document.getElementById('listPesan');
         const btnKirim = document.getElementById('btnKirim');
+        const fotoInput = document.getElementById('fotoFile');
+        const fotoPreview = document.getElementById('fotoPreview');
+        const fotoName = document.getElementById('fotoName');
+        const previewBox = document.getElementById('previewBox');
+        const btnHapusFoto = document.getElementById('btnHapusFoto');
+        const searchNamaInput = document.getElementById('searchNama');
+
+        let selectedPhoto = null;
+        let previewObjectUrl = null;
+        let allMessages = [];
 
         function showNotif(type, text) {
             notifAlert.className = type === 'error'
@@ -293,8 +337,146 @@
                 : "mt-4 p-4 rounded-xl text-sm font-medium bg-green-950/80 border border-green-800 text-green-300";
             notifAlert.innerText = text;
             notifAlert.classList.remove('hidden');
-            setTimeout(() => notifAlert.classList.add('hidden'), 4000);
+            setTimeout(() => notifAlert.classList.add('hidden'), 4500);
         }
+
+        function resetPhotoSelection() {
+            selectedPhoto = null;
+            fotoInput.value = "";
+            if (previewObjectUrl) {
+                URL.revokeObjectURL(previewObjectUrl);
+                previewObjectUrl = null;
+            }
+            previewBox.innerHTML = "";
+            fotoName.innerText = "";
+            fotoPreview.classList.add('hidden');
+        }
+
+        fotoInput.addEventListener('change', () => {
+            const file = fotoInput.files[0];
+            if (!file) {
+                resetPhotoSelection();
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                resetPhotoSelection();
+                showNotif('error', "❌ Pilih file foto (JPG, PNG, WEBP). Untuk video belum didukung di paket gratis tanpa Storage.");
+                return;
+            }
+
+            if (file.size > MAX_INPUT_PHOTO_SIZE) {
+                resetPhotoSelection();
+                showNotif('error', "❌ Ukuran foto maksimal 10 MB.");
+                return;
+            }
+
+            if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+            selectedPhoto = file;
+            previewObjectUrl = URL.createObjectURL(file);
+            fotoName.innerText = `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`;
+            previewBox.innerHTML = `<img src="${previewObjectUrl}" alt="Preview" class="max-h-60 w-auto object-contain rounded-xl">`;
+            fotoPreview.classList.remove('hidden');
+        });
+
+        btnHapusFoto.addEventListener('click', resetPhotoSelection);
+
+        function compressPhotoToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxDim = 900;
+                        let { width, height } = img;
+
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        let quality = 0.75;
+                        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        while (dataUrl.length > MAX_COMPRESSED_CHARS && quality > 0.3) {
+                            quality -= 0.1;
+                            dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        if (dataUrl.length > MAX_COMPRESSED_CHARS) {
+                            reject(new Error("Foto terlalu detail/besar meski sudah dikompres."));
+                            return;
+                        }
+                        resolve(dataUrl);
+                    };
+                    img.onerror = () => reject(new Error("Gagal membaca gambar."));
+                    img.src = ev.target.result;
+                };
+                reader.onerror = () => reject(new Error("Gagal membuka file."));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderMessages() {
+            const keyword = searchNamaInput.value.trim().toLowerCase();
+            const filtered = keyword
+                ? allMessages.filter(m => (m.name || "").toLowerCase().includes(keyword))
+                : allMessages;
+
+            listPesan.innerHTML = "";
+
+            if (filtered.length === 0) {
+                const msg = keyword
+                    ? `Tidak ada pesan dengan nama "${escapeHtml(searchNamaInput.value.trim())}".`
+                    : "Belum ada pesan masuk. Jadilah yang pertama mengirim pesan!";
+                listPesan.innerHTML = `<div class="text-center py-6 text-gray-500 text-sm">${msg}</div>`;
+                return;
+            }
+
+            filtered.forEach((data) => {
+                let timeString = "Baru saja";
+                if (data.createdAt && typeof data.createdAt.toDate === 'function') {
+                    const date = data.createdAt.toDate();
+                    timeString = date.toLocaleString('id-ID', {
+                        day: '2-digit', month: 'short',
+                        hour: '2-digit', minute: '2-digit'
+                    }) + " WIB";
+                }
+
+                const safePhoto = sanitizeImageSrc(data.photoData || data.mediaUrl);
+                const photoHtml = safePhoto
+                    ? `
+                        <div class="mt-3 rounded-xl overflow-hidden bg-black border border-apokalipto-border">
+                            <img src="${safePhoto}" alt="Foto dari ${escapeHtml(data.name)}" loading="lazy" class="w-full max-h-80 object-contain bg-black">
+                        </div>
+                    `
+                    : "";
+
+                const card = document.createElement('div');
+                card.className = "bg-black/40 border border-apokalipto-border p-4 rounded-xl";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-apokalipto-yellow text-sm">${escapeHtml(data.name)}</span>
+                        <span class="text-xs text-gray-500">${timeString}</span>
+                    </div>
+                    <p class="text-gray-300 text-sm whitespace-pre-line">${escapeHtml(data.message)}</p>
+                    ${photoHtml}
+                `;
+                listPesan.appendChild(card);
+            });
+        }
+
+        searchNamaInput.addEventListener('input', renderMessages);
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -309,62 +491,47 @@
             }
 
             btnKirim.disabled = true;
+            const originalBtnText = btnKirim.innerText;
+            btnKirim.innerText = selectedPhoto ? "Mengompres & mengirim..." : "Mengirim pesan...";
+
             try {
+                let photoData = "";
+                if (selectedPhoto) {
+                    photoData = await compressPhotoToBase64(selectedPhoto);
+                }
+
                 await addDoc(collection(db, "apokalipto_messages"), {
                     name: nama,
                     message: pesan,
+                    photoData,
                     createdAt: serverTimestamp()
                 });
+
                 form.reset();
+                resetPhotoSelection();
                 showNotif('success', "✅ Pesan berhasil dikirim ke papan pesan!");
             } catch (error) {
-                console.error("Error adding document: ", error);
-                showNotif('error', "❌ Gagal mengirim pesan ke server. Cek aturan (Rules) Firestore kamu.");
+                console.error("Error submitting message: ", error);
+                showNotif('error', `❌ ${error.message || "Gagal mengirim pesan. Cek aturan (Rules) Firestore kamu."}`);
             } finally {
                 btnKirim.disabled = false;
+                btnKirim.innerText = originalBtnText;
             }
         });
 
-        // Ambil pesan real-time
         const q = query(collection(db, "apokalipto_messages"), orderBy("createdAt", "desc"));
 
         onSnapshot(q, (snapshot) => {
-            listPesan.innerHTML = '';
-
-            if (snapshot.empty) {
-                listPesan.innerHTML = '<div class="text-center py-6 text-gray-500 text-sm">Belum ada pesan masuk. Jadilah yang pertama mengirim pesan!</div>';
-                return;
-            }
-
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-
-                let timeString = "Baru saja";
-                if (data.createdAt) {
-                    const date = data.createdAt.toDate();
-                    timeString = date.toLocaleString('id-ID', {
-                        day: '2-digit', month: 'short',
-                        hour: '2-digit', minute: '2-digit'
-                    }) + " WIB";
-                }
-
-                const card = document.createElement('div');
-                card.className = "bg-black/40 border border-apokalipto-border p-4 rounded-xl";
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold text-apokalipto-yellow text-sm">${escapeHtml(data.name)}</span>
-                        <span class="text-xs text-gray-500">${timeString}</span>
-                    </div>
-                    <p class="text-gray-300 text-sm whitespace-pre-line">${escapeHtml(data.message)}</p>
-                `;
-                listPesan.appendChild(card);
-            });
+            allMessages = snapshot.docs.map((docSnap) => ({
+                id: docSnap.id,
+                ...docSnap.data()
+            }));
+            renderMessages();
         }, (error) => {
             console.error("Gagal memuat pesan: ", error);
             listPesan.innerHTML = '<div class="text-center py-6 text-red-400 text-sm">Gagal memuat pesan. Cek aturan (Rules) Firestore.</div>';
         });
 
-        // Tampilkan galeri Day 1 saat pertama buka
         renderGallery('day1');
     </script>
 </body>
