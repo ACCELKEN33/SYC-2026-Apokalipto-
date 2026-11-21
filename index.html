@@ -164,10 +164,11 @@
         <p>&copy; 2026 Kelompok Apokalipto • SYC 2026. All rights reserved.</p>
     </footer>
 
-    <!-- SATU SCRIPT: GALERI + FIRESTORE (FOTO TERKOMPRESI + SEARCH) -->
+    <!-- SATU SCRIPT UTUH: GALERI + LIGHTBOX + FIREBASE FIRESTORE + FOTO + SEARCH + DELETE -->
+<!-- SATU SCRIPT UTUH: GALERI + LIGHTBOX + FIREBASE FIRESTORE + FOTO + SEARCH + ADMIN DELETE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ================= FIREBASE =================
         const firebaseConfig = {
@@ -184,8 +185,9 @@
         const db = getFirestore(app);
 
         const TOKEN_VALID = "APOKALIPTO2026";
-        const MAX_INPUT_PHOTO_SIZE = 10 * 1024 * 1024; // 10 MB sebelum dikompres
-        const MAX_COMPRESSED_CHARS = 700000; // Aman di bawah batas 1 MB dokumen Firestore
+        const ADMIN_DELETE_KEY = "KENNETH_ADMIN_2026"; // Ganti dengan kode rahasia khusus admin kamu
+        const MAX_INPUT_PHOTO_SIZE = 10 * 1024 * 1024;
+        const MAX_COMPRESSED_CHARS = 700000;
 
         // ================= DATA GALERI =================
         const galleryData = {
@@ -243,7 +245,7 @@
             return "";
         }
 
-        // ================= GALERI =================
+        // ================= GALERI & LIGHTBOX =================
         function renderGallery(category) {
             const container = document.getElementById('gallery-container');
             container.innerHTML = "";
@@ -315,7 +317,7 @@
         window.nextPhoto = nextPhoto;
         window.prevPhoto = prevPhoto;
 
-        // ================= PAPAN PESAN + FOTO TERKOMPRESI + SEARCH =================
+        // ================= PAPAN PESAN + FOTO + SEARCH + ADMIN DELETE =================
         const form = document.getElementById('pesanForm');
         const notifAlert = document.getElementById('notifAlert');
         const listPesan = document.getElementById('listPesan');
@@ -361,7 +363,7 @@
 
             if (!file.type.startsWith('image/')) {
                 resetPhotoSelection();
-                showNotif('error', "❌ Pilih file foto (JPG, PNG, WEBP). Untuk video belum didukung di paket gratis tanpa Storage.");
+                showNotif('error', "❌ Pilih file foto (JPG, PNG, WEBP).");
                 return;
             }
 
@@ -427,6 +429,29 @@
             });
         }
 
+        // Hanya admin dengan ADMIN_DELETE_KEY yang bisa menghapus pesan
+        async function deleteMessage(id, senderName) {
+            const inputAdminKey = prompt(`Khusus Admin: masukkan kode admin untuk menghapus pesan dari "${senderName || 'anggota'}":`);
+            if (inputAdminKey === null) return;
+
+            if (inputAdminKey.trim() !== ADMIN_DELETE_KEY) {
+                showNotif('error', "❌ Akses ditolak! Hanya admin yang bisa menghapus pesan.");
+                return;
+            }
+
+            if (!confirm("Yakin mau menghapus pesan ini secara permanen?")) return;
+
+            try {
+                await deleteDoc(doc(db, "apokalipto_messages", id));
+                showNotif('success', "🗑️ Pesan berhasil dihapus oleh admin.");
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                showNotif('error', "❌ Gagal menghapus pesan. Cek aturan (Rules) Firestore kamu.");
+            }
+        }
+
+        window.deleteMessage = deleteMessage;
+
         function renderMessages() {
             const keyword = searchNamaInput.value.trim().toLowerCase();
             const filtered = keyword
@@ -462,12 +487,18 @@
                     `
                     : "";
 
+                const safeIdJs = JSON.stringify(String(data.id));
+                const safeNameJs = JSON.stringify(String(data.name || ""));
+
                 const card = document.createElement('div');
                 card.className = "bg-black/40 border border-apokalipto-border p-4 rounded-xl";
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
+                    <div class="flex justify-between items-center gap-2 mb-1">
                         <span class="font-bold text-apokalipto-yellow text-sm">${escapeHtml(data.name)}</span>
-                        <span class="text-xs text-gray-500">${timeString}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500">${timeString}</span>
+                            <button type="button" onclick='deleteMessage(${safeIdJs}, ${safeNameJs})' class="text-xs font-semibold text-red-400 hover:text-red-300 transition">Hapus</button>
+                        </div>
                     </div>
                     <p class="text-gray-300 text-sm whitespace-pre-line">${escapeHtml(data.message)}</p>
                     ${photoHtml}
@@ -486,7 +517,7 @@
             const pesan = document.getElementById('isiPesan').value.trim();
 
             if (token !== TOKEN_VALID) {
-                showNotif('error', "❌ Token salah! Orang luar tidak bisa mengirim pesan.");
+                showNotif('error', "❌ Token salah! Orang luar tidak bisa mengirim pesan. Minta token ke anggota kelompok ya.");
                 return;
             }
 
